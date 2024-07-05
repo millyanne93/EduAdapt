@@ -6,17 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/millyanne93/EduAdapt.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/millyanne93/EduAdapt/issues"
-  },
-  "homepage": "https://github.com/millyanne93/EduAdapt#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
