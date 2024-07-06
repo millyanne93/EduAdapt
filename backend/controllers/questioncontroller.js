@@ -5,7 +5,7 @@ exports.createQuestion = async (req, res) => {
 
   try {
     const question = new Question({ text, difficulty_level, topic, answers });
-    await question.save();
+    await question.save(); // MongoDB generates a unique _id here
     res.status(201).json(question);
   } catch (err) {
     console.error(err.message);
