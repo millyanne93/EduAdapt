@@ -6,7 +6,6 @@ exports.createAssessment = async (req, res) => {
   const student = req.user.id;
 
   try {
-    // Validate that all question IDs exist and determine correctness
     for (let i = 0; i < results.length; i++) {
       const question = await Question.findById(results[i].question);
       if (!question) {
@@ -14,8 +13,8 @@ exports.createAssessment = async (req, res) => {
       }
 
       // Check if the answer is correct
-      const correctAnswer = question.answers.find(answer => answer.correct).answer_text;
-      results[i].correct = results[i].answer === correctAnswer;
+      const correctOption = question.options.find(option => option.isCorrect);
+      results[i].correct = results[i].answer === correctOption.text;
     }
 
     const assessment = new Assessment({
