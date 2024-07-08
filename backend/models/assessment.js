@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const AssessmentSchema = new mongoose.Schema({
   student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  questions: [
+  results: [
     {
       question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
       answer: { type: String, required: true },
