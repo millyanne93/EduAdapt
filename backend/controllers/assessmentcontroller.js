@@ -2,7 +2,7 @@ const Assessment = require('../models/assessment');
 const Question = require('../models/question');
 
 exports.createAssessment = async (req, res) => {
-  const { questions, score, topic, sessionDuration, skippedQuestions } = req.body;
+  const { questions, score, topic, sessionDuration, skippedQuestions, hintsUsed, perceivedDifficulty, answerPattern } = req.body;
   const student = req.user.id;
 
   try {
@@ -24,7 +24,10 @@ exports.createAssessment = async (req, res) => {
       score,
       topic,
       sessionDuration,
-      skippedQuestions
+      skippedQuestions,
+      hintsUsed,
+      perceivedDifficulty,
+      answerPattern
     });
 
     await assessment.save();
