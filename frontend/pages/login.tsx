@@ -1,7 +1,12 @@
 import AuthForm from "@/components/AuthForm";
+import Layout from '../components/Layout';
 
 const LoginPage: React.FC = () => {
-    return <AuthForm mode="login" />;
+    return (
+        <Layout>
+            <AuthForm mode="login" />
+        </Layout>
+);
 };
 
 export default LoginPage;
