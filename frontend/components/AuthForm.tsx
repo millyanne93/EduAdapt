@@ -29,7 +29,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     };
 
     return (
-        <div className='min-h-screen flex items-center justify-center bg-gray-100'>
+        <div className='min-h-screen flex items-center justify-center'>
             <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
                 <h2 className='text-2xl font-bold mb-6'>{mode === 'login' ? 'Login' : 'Register'}</h2>
                 <form onSubmit={handleSubmit}>

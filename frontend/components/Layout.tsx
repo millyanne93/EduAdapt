@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </nav>
-      <main className="flex-grow container mx-auto p-4">
+      <main className="flex-grow container mx-auto">
         {children}
       </main>
       <footer className="bg-green-700 p-4 text-white text-center">
