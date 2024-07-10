@@ -18,6 +18,11 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/questions', require('./routes/questionRoutes'));
 app.use('/api/assessments', require('./routes/assessmentRoutes'));
 
-const PORT = process.env.PORT || 5000;
+// Export the app instance for testing
+module.exports = app;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+// Start the server (if running directly)
+if (require.main === module) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+}

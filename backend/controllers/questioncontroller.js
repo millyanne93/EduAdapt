@@ -2,7 +2,7 @@ const Question = require('../models/question');
 
 // Create a new question
 exports.createQuestion = async (req, res) => {
-  const { text, difficulty, options, createdBy } = req.body;
+  const { text, difficulty, topic, options, createdBy } = req.body;
 
   try {
     // Validate the options array
@@ -17,7 +17,7 @@ exports.createQuestion = async (req, res) => {
     }
 
     // Create a new question
-    const question = new Question({ text, difficulty, options, createdBy });
+    const question = new Question({ text, difficulty, topic, options, createdBy });
     await question.save();
     res.status(201).json(question);
   } catch (err) {
@@ -34,6 +34,6 @@ exports.getQuestions = async (req, res) => {
     res.json(questions);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server error' });
   }
 };
