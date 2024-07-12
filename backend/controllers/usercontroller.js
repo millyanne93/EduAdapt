@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Helper function to generate a token
 const generateToken = (user) => {
@@ -9,7 +10,7 @@ const generateToken = (user) => {
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { username, email, classname: studentClass, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     // Check if the user already exists
@@ -19,7 +20,11 @@ exports.registerUser = async (req, res) => {
     }
 
     // Create a new user
-    user = new User({ username, email, classname: studentClass, password });
+    user = new User({ username, email, password });
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
 
     // Save the user to the database
     await user.save();
@@ -57,7 +62,7 @@ exports.loginUser = async (req, res) => {
     }
 
     // Check if the password matches
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
