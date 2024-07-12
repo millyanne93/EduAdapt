@@ -1,6 +1,5 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -11,12 +10,13 @@ connectDB();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/questions', require('./routes/questionRoutes'));
 app.use('/api/assessments', require('./routes/assessmentRoutes'));
+app.use('/api/testresults', require('./routes/testResultRoutes'));
 
 // Export the app instance for testing
 module.exports = app;
