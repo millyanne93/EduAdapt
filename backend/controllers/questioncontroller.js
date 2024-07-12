@@ -21,6 +21,7 @@ exports.getQuestionsByCategory = async (req, res) => {
   try {
     const questions = await Question.find({ topic });
     res.json(questions);
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -34,6 +35,6 @@ exports.getQuestions = async (req, res) => {
     res.json(questions);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server error' });
   }
 };

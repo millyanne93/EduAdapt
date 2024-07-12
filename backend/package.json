@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha --require test/setup.js --timeout 10000",
     "start": "node server",
     "dev": "nodemon server"
   },
@@ -21,6 +21,10 @@
     "mongoose": "^8.4.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "chai": "^4.3.6",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.1.4",
+    "sinon": "^15.0.4",
+    "supertest": "^7.0.0"
   }
 }
