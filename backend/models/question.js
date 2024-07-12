@@ -1,19 +1,13 @@
 const mongoose = require('mongoose');
 
-// Define the Option schema
-const optionSchema = new mongoose.Schema({
+// Question Schema
+const questionSchema = new mongoose.Schema({
   text: { type: String, required: true },
-  isCorrect: { type: Boolean, required: true }
-});
-
-// Define the Question schema
-const QuestionSchema = new mongoose.Schema({
-  text: { type: String, required: true },
-  difficulty: { type: String, required: true },
-  topic: { type: String, required: true },
-  options: [optionSchema],
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  options: [{ type: String, required: true }],
+  correctOption: { type: Number, required: true },
+  difficulty: { type: Number, required: true },
+  topic: { type: String, required: true }
 });
 
 // Export the Question model
-module.exports = mongoose.model('Question', QuestionSchema);
+module.exports = mongoose.model('Question', questionSchema);
