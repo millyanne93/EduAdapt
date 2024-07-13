@@ -10,7 +10,7 @@ const generateToken = (user) => {
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password } = req.body
 
   try {
     // Check if the user already exists
@@ -29,7 +29,9 @@ exports.registerUser = async (req, res) => {
     // Save the user to the database
     await user.save();
 
-    res.status(201).json({ msg: 'User registered successfully' });
+    // Generate a token
+    const token = generateToken(user);
+    res.status(201).json({ token });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
