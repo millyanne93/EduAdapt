@@ -26,4 +26,18 @@ const getAssessments = async (req, res) => {
   }
 };
 
-module.exports = { createAssessment, getAssessments };
+// Get assessment by id
+const getAssessmentById = async (req, res) => {
+  try {
+    const assessment = await Assessment.findById(req.params.id);
+    if (!assessment) {
+      return res.status(404).json({ msg: 'Assessment not found' });
+    }
+    res.json(assessment);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+module.exports = { createAssessment, getAssessments, getAssessmentById };
