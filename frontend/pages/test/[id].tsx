@@ -1,12 +1,12 @@
-import Test from "@/components/Test";
+import TestStart from "@/components/TestStart";
 import Layout from "@/components/Layout";
 
-const TestPage: React.FC = () => {
+const TestStartPage: React.FC = () => {
     return (
         <Layout>
-            <Test />
+            <TestStart />
         </Layout>
     );
 };
 
-export default TestPage;
+export default TestStartPage;
