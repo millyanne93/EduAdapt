@@ -38,7 +38,7 @@ const Test: React.FC = () => {
       const getAssessment = async () => {
         const token = localStorage.getItem('token');
         try {
-          const response = await axios.get('http://localhost:5000/api/assessments/${id}', {
+          const response = await axios.get(`http://localhost:5000/api/assessments/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setAssessment(response.data);
@@ -62,14 +62,15 @@ const Test: React.FC = () => {
       }, 0);
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.post('http://localhost:5000//api/testresults',
+        const response = await axios.post('http://localhost:5000/api/testresults/',
           { testId: id, responses, score },
           { headers: { Authorization: `Bearer ${token}`} }
         );
       } catch (error) {
-        setMessage('Failed to create assessments');
+        console.log(error)
+        setMessage('Failed to create test results');
       }
-      router.push('/results');
+      router.push('/result');
     }
   }
   if (!assessment) return <div>Loading...</div>;
@@ -83,7 +84,9 @@ const Test: React.FC = () => {
       <p className="text-lg mb-6">{currentQuestion.text}</p>
       <div className="space-y-4">
       {currentQuestion.options.map((option, index) => (
-        <button key={index} onClick={() => handleAnswer(currentQuestion._id, index)}>
+        <button key={index}
+          onClick={() => handleAnswer(currentQuestion._id, index)}
+          className="bg-green-500 text-white p-2 rounded-md mb-2 mr-2">
           {option}
         </button>
       ))}
