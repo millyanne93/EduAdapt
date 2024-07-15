@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 interface Questions {
   _id: string;
@@ -10,14 +11,17 @@ interface Questions {
   topic: string;
 }
 
-interface Assessment {
+interface Assessments {
+  _id: string;
   title: string;
-  questionIds: string[];
+  questions: Questions[];
+  createdBy: string;
 }
 
 const Admin = () => {
   const [topic, setTopic] = useState('');
   const [questions, setQuestions] = useState<Questions[]>([]);
+  const [assessments, setAssessments] = useState<Assessments[]>([]);
   const [selectedQuestions, setSelectedQuestions] = useState<Questions[]>([]);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
@@ -37,7 +41,16 @@ const Admin = () => {
       };
       getQuestions();
     }
-  }, [topic]);
+    const fetchAssessments = async () => {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/assessments', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAssessments(response.data);
+    };
+
+    fetchAssessments();
+  }, [topic, assessments]);
 
   const handleCreateAssessment = async () => {
     const token = localStorage.getItem('token');
@@ -85,7 +98,19 @@ const Admin = () => {
       </div>
       <button
         onClick={handleCreateAssessment}
-        className="mt-6 p-4 bg-green-500 text-white rounded-lg hover:bg-green-600">Create Assessment</button>
+        className="mt-6 p-4 bg-green-500 text-white rounded-lg hover:bg-green-600">
+          Create Assessment
+      </button>
+      <div className="mt-4">
+        <h2 className="text-xl font-semibold mb-4">Assessments</h2>
+        <ul className="space-y-4">
+          {assessments.map((assessment) => (
+            <li key={assessment._id} className="p-4 bg-white shadow rounded-lg">
+              {assessment.title} <Link href={`/admin/questions/${assessment._id}`}>Add Questions</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 };
