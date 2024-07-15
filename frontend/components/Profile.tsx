@@ -56,7 +56,11 @@ const Profile: React.FC = () => {
       <h2 className="text-xl font-semibold mb-4">Assessments</h2>
       <ul className="space-y-4">
         {assessments.map((assessment) => (
-          <li key={assessment._id} className="p-4 bg-white shadow rounded-lg">{assessment.title}</li>
+          <li key={assessment._id} className="p-4 bg-white shadow rounded-lg">
+            <Link href={`/test/${assessment._id}`} className="text-green-500">
+              {assessment.title}
+            </Link>
+          </li>
         ))}
       </ul>
       {message && <p className="text-red-500 text-sm">{message}</p>}
