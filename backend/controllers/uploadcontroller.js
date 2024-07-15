@@ -38,7 +38,7 @@ const processUploadedFile = async (req, res) => {
     const questions = parseTextToQuestions(extractedText, topic);
     
     // Run the Python script to classify questions
-    PythonShell.run('backend/utils/pytorch_utils.py', { args: [JSON.stringify(questions)] }, async (err, results) => {
+    PythonShell.run('backend/utils/pytorchUtils.py', { args: [JSON.stringify(questions)] }, async (err, results) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ msg: 'Error classifying questions' });
