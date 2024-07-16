@@ -8,6 +8,7 @@ const AddQuestions: React.FC = () => {
   const [questionText, setQuestionText] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctOption, setCorrectOption] = useState<number | null>(null);
+  const [difficulty, setDifficulty] = useState('');
   const [topic, setTopic] = useState('');
   const [message, setMessage] = useState('');
 
@@ -20,6 +21,7 @@ const AddQuestions: React.FC = () => {
           text: questionText,
           options,
           correctOption,
+          difficulty,
           topic,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -64,6 +66,15 @@ const AddQuestions: React.FC = () => {
           type="number"
           value={correctOption ?? ''}
           onChange={e => setCorrectOption(parseInt(e.target.value, 10))}
+          className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Difficulty</label>
+        <input
+          type="text"
+          value={difficulty}
+          onChange={e => setDifficulty(e.target.value)}
           className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
         />
       </div>
