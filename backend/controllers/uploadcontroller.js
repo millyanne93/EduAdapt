@@ -4,7 +4,7 @@ const { extractTextFromPdf } = require('../utils/ocrUtils');
 const { extractTextFromWord } = require('../utils/textExtraction');
 const Question = require('../models/question');
 const QuestionPaper = require('../models/questionPaper');
-const { PythonShell } = require('python-shell');
+const { processQuestionsWithGemini } = require('../../ai/gemini_model');
 
 const processUploadedFile = async (req, res) => {
   const filePath = req.file.path;
@@ -37,32 +37,21 @@ const processUploadedFile = async (req, res) => {
 
     const questions = parseTextToQuestions(extractedText, topic);
 
-    // Run the Python script to classify questions
-    const options = {
-      args: [JSON.stringify(questions)]
-    };
+    // Classify questions using Gemini AI and get additional data
+    const processedQuestions = await processQuestionsWithGemini(questions);
 
-    PythonShell.run(path.join(__dirname, '../utils/pytorchUtils.py'), options, async (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ msg: 'Error classifying questions' });
-      }
-
-      const classifiedQuestions = JSON.parse(results[0]);
-
-      // Create a new QuestionPaper document
-      const questionPaper = new QuestionPaper({
-        filename: req.file.filename,
-        uploadedBy: req.user.id,
-        extractedQuestions: classifiedQuestions.map(q => q._id),  // Extracted question IDs
-        topic: topic  // Add topic to the question paper
-      });
-
-      await questionPaper.save();  // Save question paper metadata to the database
-      await Question.insertMany(classifiedQuestions);  // Save questions to the database
-
-      res.status(200).json({ msg: 'Questions uploaded and extracted successfully' });
+    // Create a new QuestionPaper document
+    const questionPaper = new QuestionPaper({
+      filename: req.file.filename,
+      uploadedBy: req.user.id,
+      extractedQuestions: processedQuestions.map(q => q._id),  // Extracted question IDs
+      topic: topic  // Add topic to the question paper
     });
+
+    await questionPaper.save();  // Save question paper metadata to the database
+    await Question.insertMany(processedQuestions);  // Save questions to the database
+
+    res.status(200).json({ msg: 'Questions uploaded and extracted successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Error processing file' });
