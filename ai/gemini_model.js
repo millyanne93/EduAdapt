@@ -1,4 +1,5 @@
-const genai = require('@google/generative-ai');
+import 'dotenv/config';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const processQuestionsWithGemini = async (questions) => {
   genai.configure({ apiKey: process.env.GEMINI_API_KEY });
@@ -75,4 +76,4 @@ const processQuestionsWithGemini = async (questions) => {
   return processedQuestions;
 };
 
-module.exports = { processQuestionsWithGemini };
+export default processQuestionsWithGemini;
