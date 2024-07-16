@@ -4,7 +4,10 @@ const { extractTextFromPdf } = require('../utils/ocrUtils');
 const { extractTextFromWord } = require('../utils/textExtraction');
 const Question = require('../models/question');
 const QuestionPaper = require('../models/questionPaper');
-const { processQuestionsWithGemini } = require('../../ai/gemini_model');
+async function getGeminiModel() {
+  const { processQuestionsWithGemini } = await import('../../ai/gemini_model');
+  return processQuestionsWithGemini;
+}
 
 const processUploadedFile = async (req, res) => {
   const filePath = req.file.path;
