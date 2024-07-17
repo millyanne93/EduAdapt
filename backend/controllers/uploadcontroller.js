@@ -4,8 +4,9 @@ const { extractTextFromPdf } = require('../utils/ocrUtils');
 const { extractTextFromWord } = require('../utils/textExtraction');
 const Question = require('../models/question');
 const QuestionPaper = require('../models/questionPaper');
+
 async function getGeminiModel() {
-  const { processQuestionsWithGemini } = await import('../../ai/gemini_model');
+  const { default: processQuestionsWithGemini } = await import('../../ai/gemini_model.js');
   return processQuestionsWithGemini;
 }
 
@@ -39,6 +40,9 @@ const processUploadedFile = async (req, res) => {
     }
 
     const questions = parseTextToQuestions(extractedText, topic);
+
+    // Get the Gemini AI model
+    const processQuestionsWithGemini = await getGeminiModel();
 
     // Classify questions using Gemini AI and get additional data
     const processedQuestions = await processQuestionsWithGemini(questions);
