@@ -1,4 +1,5 @@
 const Question = require('../models/question');
+const Assessment = require('../models/assessment');
 
 // Create a new question
 exports.createQuestion = async (req, res) => {
@@ -14,15 +15,16 @@ exports.createQuestion = async (req, res) => {
   }
 };
 
-// Get questions by category
+// Get questions by category (topic)
 exports.getQuestionsByCategory = async (req, res) => {
-  const { topic } = req.params;
-
   try {
-    const questions = await Question.find({ topic });
-    res.json(questions);
+    const questions = await Question.find({ topic: req.params.topic });
+    if (!questions || questions.length === 0) {
+      return res.status(404).json({ msg: 'No questions found for this category' });
+    }
+    res.status(200).json(questions);
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
@@ -33,7 +35,7 @@ exports.getQuestions = async (req, res) => {
     const questions = await Question.find();
     res.json(questions);
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
@@ -42,8 +44,19 @@ exports.getQuestions = async (req, res) => {
 exports.getQuestionById = async (req, res) => {
   try {
     const response = await Question.findById(req.params.id);
-    res.status(200).json(response);
+    if (!response) {
+      return res.status(404).json({ msg: 'Question not found' });
+    }
+
+    // Find the assessment containing this question
+    const assessment = await Assessment.findOne({ questions: req.params.id });
+    const responseObj = {
+      response,
+      ...(assessment && { assessmentId: assessment._id })
+    };
+    res.status(200).json(responseObj);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error'});
   }
 };
@@ -51,7 +64,8 @@ exports.getQuestionById = async (req, res) => {
 // Update Question
 exports.updateQuestion = async (req, res) => {
   try {
-    const question = await Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const questionId = req.params.id;
+    const question = await Question.findByIdAndUpdate(questionId, req.body, { new: true });
     if (!question) {
       return res.status(404).json({ msg: 'Question not found' });
     }

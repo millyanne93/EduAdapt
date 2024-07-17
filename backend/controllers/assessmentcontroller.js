@@ -16,6 +16,26 @@ const createAssessment = async (req, res) => {
   }
 };
 
+// Create question in an assessment
+const createQuestionInAssessment = async (req, res) => {
+  const assessmentId = req.params.id;
+  const { text, options, correctOption, difficulty, topic } = req.body;
+
+  try {
+    const question = new Question({ text, options, correctOption, difficulty, topic });
+    await question.save();
+
+    const assessment = await Assessment.findById(assessmentId);
+    assessment.questions.push(question);
+    await assessment.save();
+    
+    res.json(question);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
+
 // Get all assessment tests
 const getAssessments = async (req, res) => {
   try {
@@ -25,6 +45,17 @@ const getAssessments = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+// Get questions for assessment
+const getQuestionsForAssessment = async (req, res) => {
+  try {
+    const assessmentId = req.params.id;
+    const assessment = await Assessment.findById(assessmentId).populate('questions');
+    res.json(assessment.questions);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+}
 
 // Get assessment by id
 const getAssessmentById = async (req, res) => {
@@ -66,10 +97,30 @@ const deleteAssessment = async (req, res) => {
   }
 };
 
+// Delete question from assessment
+const deleteQuestionFromAssessment = async (req, res) => {
+  const { assessmentId, questionId } = req.params;
+  try {
+    const assessment = await Assessment.findById(assessmentId);
+    if (!assessment) {
+      return res.status(404).json({ message: 'Assessment not found' });
+    }
+
+    assessment.questions = assessment.questions.filter(q => q._id.toString() !== questionId);
+    await assessment.save();
+    res.json({ msg: 'Question removed from assessment'});
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error'});
+  }
+}
+
 module.exports = {
   createAssessment,
   getAssessments,
   getAssessmentById,
   updateAssessment,
-  deleteAssessment
+  deleteAssessment,
+  getQuestionsForAssessment,
+  deleteQuestionFromAssessment,
+  createQuestionInAssessment
 };
