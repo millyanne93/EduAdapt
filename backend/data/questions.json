@@ -1,0 +1,115 @@
+[
+  {
+    "text": "Which country has the longest coastline in the world?",
+    "options": ["Australia", "Canada", "USA", "Russia"],
+    "correctOption": 2,
+    "difficulty": 2,
+    "topic": "Geography"
+  },
+  {
+    "text": "What is the square root of 144?",
+    "options": ["10", "11", "12", "13"],
+    "correctOption": 3,
+    "difficulty": 1,
+    "topic": "Math"
+  },
+  {
+    "text": "What is the chemical symbol for Sodium?",
+    "options": ["S", "Na", "So", "N"],
+    "correctOption": 2,
+    "difficulty": 2,
+    "topic": "Science"
+  },
+  {
+    "text": "Who was the first president of the United States?",
+    "options": ["Abraham Lincoln", "George Washington", "Thomas Jefferson", "John Adams"],
+    "correctOption": 2,
+    "difficulty": 1,
+    "topic": "History"
+  },
+  {
+    "text": "Who wrote 'Pride and Prejudice'?",
+    "options": ["Charlotte Bronte", "Jane Austen", "Charles Dickens", "William Shakespeare"],
+    "correctOption": 2,
+    "difficulty": 3,
+    "topic": "Literature"
+  },
+  {
+    "text": "What does CPU stand for?",
+    "options": ["Central Processing Unit", "Central Performance Unit", "Computer Personal Unit", "Central Power Unit"],
+    "correctOption": 1,
+    "difficulty": 1,
+    "topic": "Technology"
+  },
+  {
+    "text": "Who painted the Mona Lisa?",
+    "options": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+    "correctOption": 3,
+    "difficulty": 1,
+    "topic": "Art"
+  },
+  {
+    "text": "In which sport would you perform a slam dunk?",
+    "options": ["Tennis", "Soccer", "Basketball", "Baseball"],
+    "correctOption": 3,
+    "difficulty": 1,
+    "topic": "Sports"
+  },
+  {
+    "text": "Who is known as the 'King of Pop'?",
+    "options": ["Elvis Presley", "Michael Jackson", "Prince", "Freddie Mercury"],
+    "correctOption": 2,
+    "difficulty": 1,
+    "topic": "Music"
+  },
+  {
+    "text": "Which movie won the first Academy Award for Best Picture?",
+    "options": ["Gone with the Wind", "Wings", "The Jazz Singer", "Metropolis"],
+    "correctOption": 2,
+    "difficulty": 3,
+    "topic": "Movies"
+  },
+  {
+    "text": "What is the capital of France?",
+    "options": ["Berlin", "Madrid", "Paris", "Rome"],
+    "correctOption": 3,
+    "difficulty": 1,
+    "topic": "Geography"
+  },
+  {
+    "text": "Who wrote 'To Kill a Mockingbird'?",
+    "options": ["Harper Lee", "Mark Twain", "Ernest Hemingway", "J.K. Rowling"],
+    "correctOption": 1,
+    "difficulty": 2,
+    "topic": "Literature"
+  },
+  {
+    "text": "What is the boiling point of water?",
+    "options": ["90°C", "95°C", "100°C", "105°C"],
+    "correctOption": 3,
+    "difficulty": 1,
+    "topic": "Science"
+  },
+  {
+    "text": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Saturn"],
+    "correctOption": 2,
+    "difficulty": 2,
+    "topic": "Science"
+  },
+  {
+    "text": "What is the chemical symbol for Gold?",
+    "options": ["Au", "Ag", "Pb", "Fe"],
+    "correctOption": 1,
+    "difficulty": 2,
+    "topic": "Chemistry"
+  },
+  {
+    "text": "Who developed the theory of relativity?",
+    "options": ["Isaac Newton", "Albert Einstein", "Niels Bohr", "Galileo Galilei"],
+    "correctOption": 2,
+    "difficulty": 3,
+    "topic": "Physics"
+  }
+
+]
