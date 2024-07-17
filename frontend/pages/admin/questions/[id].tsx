@@ -33,7 +33,7 @@ const AssessmentQuestions: React.FC = () => {
       const token = localStorage.getItem('token');
       try {
         const response = await axios.get(`http://localhost:5000/api/assessments/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setAssessment(response.data);
       } catch (error) {
@@ -46,15 +46,33 @@ const AssessmentQuestions: React.FC = () => {
     }
   }, [id]);
 
-  const handleDeleteQuestion = (questionId: string) => {
-    if (!assessment) return;
-    setAssessment({
-      ...assessment,
-      questions: assessment.questions.filter(q => q._id !== questionId)
-    });
-    setIsModalOpen(false);
+  const handleDeleteQuestionInAssessment = async (assessmentId: string, questionId: string) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:5000/api/assessments/${assessmentId}/questions/${questionId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAssessment(prevAssessment => {
+        if (!prevAssessment) return prevAssessment;
+        return {
+          ...prevAssessment,
+          questions: prevAssessment.questions.filter(question => question._id !== questionId),
+        };
+      });
+      setMessage('Question has been deleted');
+    } catch (error) {
+      setMessage('Failed to delete question');
+    } finally {
+      setIsModalOpen(false);
+    }
   };
-
+  
+  const handleDeleteQuestionInAssessmentClick = (assessmentId: string, questionId: string) => {
+    return async () => {
+      await handleDeleteQuestionInAssessment(assessmentId, questionId);
+    };
+  };
+  
   const openDeleteModal = (question: Questions) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
@@ -64,12 +82,25 @@ const AssessmentQuestions: React.FC = () => {
     router.push(`/admin/questions/update/${question._id}`);
   };
 
+  const handleAddQuestion = () => {
+    router.push(`/admin/questions/add/${id}`);
+  };
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   return (
     <div className="my-6 p-8 bg-gray-100 min-h-screen">
       {assessment && (
         <>
           <h1 className="text-2xl font-bold mb-6">{assessment.title} - Questions</h1>
-          <button className="text-green-500 hover:text-green-700 mb-4">
+          <button className="text-green-500 hover:text-green-700 mb-4" onClick={handleAddQuestion}>
             <FiEdit /> Add Question
           </button>
           <ul className="space-y-4">
@@ -91,7 +122,7 @@ const AssessmentQuestions: React.FC = () => {
             <ConfirmModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
-              onConfirm={() => handleDeleteQuestion(selectedQuestion._id)}
+              onConfirm={() => handleDeleteQuestionInAssessmentClick(assessment._id, selectedQuestion._id)()}
               title="Remove Question"
               description="Are you sure you want to remove this question from the assessment?"
             />

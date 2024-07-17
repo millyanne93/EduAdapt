@@ -37,7 +37,7 @@ const Admin = () => {
       const getQuestions = async () => {
         const token = localStorage.getItem('token');
         try {
-          const response = await axios.get(`http://localhost:5000/api/questions/${topic}`, {
+          const response = await axios.get(`http://localhost:5000/api/questions/category/${topic}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setQuestions(response.data);
@@ -69,6 +69,14 @@ const Admin = () => {
     setSelectedAssessment(null);
   };
 
+  const handleDeleteQuestion = async (questionId: string) => {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(`http://localhost:5000/api/questions/${questionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  };
+
   const openDeleteModal = (assessment: Assessments) => {
     setSelectedAssessment(assessment);
     setModalType('assessment');
@@ -82,11 +90,27 @@ const Admin = () => {
         { title, questionIds: selectedQuestions.map((q) => q._id) },
         { headers: { Authorization: `Bearer ${token}`} }
       );
-      alert('An assessment has been created');
+      setMessage('An assessment has been created');
     } catch (error) {
       setMessage('Failed to create assessments');
     }
   };
+
+  const handleDeleteQuestionClick = (questionId: string) => {
+    return async () => {
+      await handleDeleteQuestion(questionId);
+      setMessage('Question has been deleted');
+    };
+  };
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   return (
     <div className="my-6 p-8 bg-gray-100 min-h-screen">
@@ -131,8 +155,9 @@ const Admin = () => {
                 }} className="mr-4"/>
               <label className="text-lg">
                 {question.text}
-                <button className="text-red-500 ml-2">Delete</button>
-                <button className="text-blue-500 ml-2">Update</button>
+                <button className="text-red-500 ml-2" onClick={handleDeleteQuestionClick(question._id)}>
+                  <FiTrash2 />
+                </button>
               </label>
             </li>
           ))}
@@ -151,9 +176,16 @@ const Admin = () => {
             <li key={assessment._id} className="flex justify-between items-center bg-white p-4 mb-2 rounded shadow">
               {assessment.title}
               <div>
-                <Link href={`/admin/questions/${assessment._id}`} passHref className="text-green-500 hover:text-green-700">
+                <button className="text-green-500 hover:text-green-700 ml-4">
+                  <Link href={`/admin/questions/add/${assessment._id}`}>
+                    Add Questions
+                  </Link>
+                </button>
+                <button className="text-green-500 hover:text-green-700 ml-4">
+                  <Link href={`/admin/questions/${assessment._id}`}>
                     <FiEdit />
-                </Link>
+                  </Link>
+                </button>
                 <button className="text-red-500 hover:text-red-700 ml-4" onClick={() => openDeleteModal(assessment)}>
                   <FiTrash2 />
                 </button>
