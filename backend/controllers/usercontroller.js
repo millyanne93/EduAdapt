@@ -10,7 +10,7 @@ const generateToken = (user) => {
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, isAdmin } = req.body;
 
   try {
     // Check if the user already exists
@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
     }
 
     // Create a new user
-    user = new User({ username, email, password });
+    user = new User({ username, email, password, isAdmin: isAdmin || false });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -29,7 +29,10 @@ exports.registerUser = async (req, res) => {
     // Save the user to the database
     await user.save();
 
-    res.status(201).json({ msg: 'User registered successfully' });
+    // Generate a token
+    const token = generateToken(user);
+
+    res.status(201).json({ token });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
