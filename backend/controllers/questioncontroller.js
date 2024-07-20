@@ -1,6 +1,28 @@
 const Question = require('../models/question');
 const Assessment = require('../models/assessment');
 
+async function generateQuestionsWithGemini(difficulty, topic, numberOfQuestions) {
+  const { default: generateQuestions } = await import('../../ai/gemini-start.js');
+  return generateQuestions(difficulty, topic, numberOfQuestions);
+}
+
+// Create and store generated questions
+exports.generateAndStoreQuestions = async (req, res) => {
+  const { difficulty, topic, numberOfQuestions } = req.body;
+
+  try {
+    const generatedQuestions = await generateQuestionsWithGemini(difficulty, topic, numberOfQuestions);
+
+    // Store the generated questions in the database
+    const questions = await Question.insertMany(generatedQuestions);
+
+    res.status(201).json(questions);
+  } catch (error) {
+    console.error('Error generating questions:', error);
+    res.status(500).json({ msg: 'Error generating questions' });
+  }
+};
+
 // Create a new question
 exports.createQuestion = async (req, res) => {
   const { text, options, correctOption, difficulty, topic } = req.body;
