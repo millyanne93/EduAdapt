@@ -8,7 +8,8 @@ const {
     getQuestions,
     getQuestionById,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+    generateAndStoreQuestions
 } = require('../controllers/questioncontroller');
 
 router.post('/', auth, adminAuth, createQuestion);
@@ -17,5 +18,7 @@ router.get('/:id', auth, adminAuth, getQuestionById);
 router.get('/category/:topic', auth, adminAuth, getQuestionsByCategory);
 router.put('/:id', auth, adminAuth, updateQuestion);
 router.delete('/:id', auth, adminAuth, deleteQuestion);
+
+router.post('/generate', auth, generateAndStoreQuestions);
 
 module.exports = router;

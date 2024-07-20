@@ -17,6 +17,9 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/questions', require('./routes/questionRoutes'));
 app.use('/api/assessments', require('./routes/assessmentRoutes'));
 app.use('/api/testresults', require('./routes/testResultRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
+app.use('/api/questionpapers', require('./routes/questionPaperRoutes'));
+app.use('/api/feedback', require('./routes/feedbackRoutes'));
 
 // Export the app instance for testing
 module.exports = app;
