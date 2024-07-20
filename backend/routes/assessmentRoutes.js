@@ -11,14 +11,15 @@ const {
     deleteQuestionFromAssessment
 } = require('../controllers/assessmentcontroller');
 const auth = require('../middleware/authMiddleware');
+const adminAuth = require('../middleware/adminAuthMiddleware');
 
-router.post('/', auth, createAssessment);
-router.post('/:id/questions', auth, createQuestionInAssessment);
+router.post('/', auth, adminAuth, createAssessment);
+router.post('/:id/questions', auth, adminAuth, createQuestionInAssessment);
 router.get('/', auth, getAssessments);
 router.get('/:id', auth, getAssessmentById);
-router.put('/:id', auth, updateAssessment);
-router.delete('/:id', auth, deleteAssessment);
-router.get('/:id/questions', auth, getQuestionsForAssessment);
-router.delete('/:assessmentId/questions/:questionId', auth, deleteQuestionFromAssessment)
+router.put('/:id', auth, adminAuth, updateAssessment);
+router.delete('/:id', auth, adminAuth, deleteAssessment);
+router.get('/:id/questions', auth, adminAuth, getQuestionsForAssessment);
+router.delete('/:assessmentId/questions/:questionId', auth, adminAuth, deleteQuestionFromAssessment);
 
 module.exports = router;

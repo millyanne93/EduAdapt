@@ -1,27 +1,43 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import Link from 'next/link'
+import Link from 'next/link';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthFormProps {
   mode: 'login' | 'register';
 };
 
+interface DecodedToken {
+  user: {
+    id: string;
+    isAdmin: boolean;
+  };
+}
+
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = mode === 'register' ? { username, email, password } : { email, password };
+      const data = mode === 'register' ? { username, email, password, isAdmin } : { email, password };
       const response = await axios.post(`http://localhost:5000/api/users/${mode}`, data);
-      console.log(response);
-      localStorage.setItem('token', response.data.token);
-      router.push('/profile');
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+
+      const decodedToken = jwtDecode<DecodedToken>(token);
+      const isUserAdmin = decodedToken.user.isAdmin;
+      if (isUserAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/profile');
+      }
     } catch (err: any) {
       setMessage(err.response.data.msg || "Failed to authenticate");
     }
@@ -38,6 +54,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 <label htmlFor="username" className="block text-gray-700">Username</label>
                 <input id="username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Username" required />
+              </div>
+              <div className='mb-4'>
+                <label htmlFor="isAdmin" className="block text-gray-700">Register as Admin</label>
+                <select id="isAdmin" name="isAdmin" value={isAdmin.toString()} onChange={(e) => setIsAdmin(e.target.value === 'true')}
+                  className="w-full p-2 border border-gray-300 rounded mt-1">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
               </div>
             </>
           )}

@@ -12,6 +12,7 @@ const testResultSchema = new mongoose.Schema({
       }
     ],
     score: { type: Number, required: true },
+    totalTimeSpent: { type: Number, required: true },
     completedAt: { type: Date, default: Date.now }
   });
 

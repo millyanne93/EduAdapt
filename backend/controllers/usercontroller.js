@@ -10,7 +10,7 @@ const generateToken = (user) => {
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { username, email, password } = req.body
+  const { username, email, password, isAdmin } = req.body
 
   try {
     // Check if the user already exists
@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
     }
 
     // Create a new user
-    user = new User({ username, email, password });
+    user = new User({ username, email, password, isAdmin });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -51,6 +51,25 @@ exports.getUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+// Get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const { username } = req.query;
+    const query = {};
+    if (username) {
+      query.username = username;
+    }
+    const users = await User.find(query);
+    if (!users) {
+      return res.status(404).json({ msg: 'Users not found' });
+    }
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+}
 
 // Log in a user
 exports.loginUser = async (req, res) => {
