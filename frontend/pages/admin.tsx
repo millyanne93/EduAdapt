@@ -1,5 +1,6 @@
 import Admin from "@/components/Admin";
 import Layout from "@/components/Layout";
+import Sidebar from "@/components/SideBar";
 
 const AdminPage: React.FC = () => {
     return (

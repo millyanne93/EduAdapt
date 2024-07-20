@@ -20,7 +20,11 @@ exports.registerUser = async (req, res) => {
     }
 
     // Create a new user
+<<<<<<< HEAD
+    user = new User({ username, email, password, isAdmin });
+=======
     user = new User({ username, email, password, isAdmin: isAdmin || false });
+>>>>>>> development
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -51,6 +55,25 @@ exports.getUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+// Get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const { username } = req.query;
+    const query = {};
+    if (username) {
+      query.username = username;
+    }
+    const users = await User.find(query);
+    if (!users) {
+      return res.status(404).json({ msg: 'Users not found' });
+    }
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+}
 
 // Log in a user
 exports.loginUser = async (req, res) => {

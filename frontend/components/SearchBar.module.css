@@ -1,0 +1,47 @@
+.searchBar {
+    position: relative;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .resultsList {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
+  .resultItem {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .resultItem:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .userResults {
+    margin-top: 20px;
+  }
+  
+  .userResults ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .userResults li {
+    margin-bottom: 5px;
+  }
+  

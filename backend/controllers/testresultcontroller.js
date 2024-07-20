@@ -5,8 +5,11 @@ const saveTestResult = async (req, res) => {
   const { testId, responses, score } = req.body;
   const userId = req.user.id;
 
+  // Calculate total time spent
+  const totalTimeSpent = responses.reduce((acc, res) => acc + res.timeSpent, 0);
+
   try {
-    const testResult = new TestResult({ userId, testId, responses, score });
+    const testResult = new TestResult({ userId, testId, responses, score, totalTimeSpent });
     await testResult.save();
     res.json(testResult);
   } catch (err) {
