@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboardList, faPlusSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faClipboardList, faRobot, faUser, faQuestionCircle, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className={` bg-gray-900 text-white transition-all ${isOpen ? 'w-64' : 'w-16'}`}>
 
-    {/* <div className={`h-full bg-gray-900 text-white transition-all ${isOpen ? 'w-64' : 'w-16'}`}> */}
+  return (
+    <div className={`bg-gray-900 text-white transition-all ${isOpen ? 'w-64' : 'w-16'}`}>
       <button onClick={() => setIsOpen(!isOpen)} className="p-2 focus:outline-none">
-        {isOpen ? 'Close' : 'Open'}
+        <FontAwesomeIcon icon={isOpen ? faTimes : faBars} className="sidebar-icon" />
       </button>
       <Link href="/admin" className="sidebar-icon group">
         <FontAwesomeIcon icon={faClipboardList} className="sidebar-icon" />
-        <span className="sidebar-tooltip group-hover:scale-100">Assessments</span>
+        <span className={`sidebar-tooltip ${isOpen ? 'block' : 'hidden'}`}>Assessments</span>
       </Link>
-      <Link href="/admin/user-results" className="sidebar-icon group">
+      <Link href="/admin/users" className="sidebar-icon group">
         <FontAwesomeIcon icon={faUser} className="sidebar-icon" />
-        <span className="sidebar-tooltip group-hover:scale-100">User Results</span>
+        <span className={`sidebar-tooltip ${isOpen ? 'block' : 'hidden'}`}>View Users</span>
+      </Link>
+      {/* <Link href="/admin/view-questions" className="sidebar-icon group">
+        <FontAwesomeIcon icon={faQuestionCircle} className="sidebar-icon" />
+        <span className={`sidebar-tooltip ${isOpen ? 'block' : 'hidden'}`}>View Questions</span>
+      </Link> */}
+      <Link href="/admin/ai-question-generator" className="sidebar-icon group">
+        <FontAwesomeIcon icon={faRobot} className="sidebar-icon" />
+        <span className={`sidebar-tooltip ${isOpen ? 'block' : 'hidden'}`}>Generate Questions</span>
       </Link>
     </div>
   );

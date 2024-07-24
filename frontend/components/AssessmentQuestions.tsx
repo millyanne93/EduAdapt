@@ -66,20 +66,20 @@ const AssessmentQuestions: React.FC = () => {
       setIsModalOpen(false);
     }
   };
-  
+
   const handleDeleteQuestionInAssessmentClick = (assessmentId: string, questionId: string) => {
     return async () => {
       await handleDeleteQuestionInAssessment(assessmentId, questionId);
     };
   };
-  
+
   const openDeleteModal = (question: Questions) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
   };
 
   const handleUpdateQuestion = (question: Questions) => {
-    router.push(`/admin/questions/update/${question._id}`);
+    router.push(`/admin/questions/update/${question._id}?assessmentId=${id}`);
   };
 
   const handleAddQuestion = () => {

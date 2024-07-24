@@ -53,12 +53,26 @@ exports.getQuestionsByCategory = async (req, res) => {
 
 // Get all questions
 exports.getQuestions = async (req, res) => {
+  const { page = 1, limit = 10, topic, difficulty } = req.query;
+  
+  const query = {};
+  if (topic) query.topic = topic;
+  if (difficulty) query.difficulty = difficulty;
+  
   try {
-    const questions = await Question.find();
-    res.json(questions);
+    const questions = await Question.find(query)
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit));
+    
+    const count = await Question.countDocuments(query);
+    
+    res.json({
+      questions,
+      totalPages: Math.ceil(count / limit),
+      currentPage: Number(page),
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).send('Server Error');
   }
 };
 
@@ -70,16 +84,16 @@ exports.getQuestionById = async (req, res) => {
       return res.status(404).json({ msg: 'Question not found' });
     }
 
-    // Find the assessment containing this question
-    const assessment = await Assessment.findOne({ questions: req.params.id });
+    // Find all assessments containing this question
+    const assessments = await Assessment.find({ questions: req.params.id }).select('_id title');
     const responseObj = {
       response,
-      ...(assessment && { assessmentId: assessment._id })
+      assessments: assessments.map(assessment => ({ id: assessment._id, title: assessment.title })),
     };
     res.status(200).json(responseObj);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error'});
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 

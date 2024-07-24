@@ -11,11 +11,17 @@ interface Question {
   topic: string;
 }
 
+interface Assessment {
+  id: string;
+  title: string;
+}
+
 const UpdateQuestion: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, assessmentId: initialAssessmentId } = router.query;
   const [question, setQuestion] = useState<Question | null>(null);
-  const [assessmentId, setAssessmentId] = useState<string | null>(null);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [selectedAssessmentId, setSelectedAssessmentId] = useState<string | null>(initialAssessmentId as string);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -26,7 +32,10 @@ const UpdateQuestion: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuestion(response.data.response);
-        setAssessmentId(response.data.assessmentId);
+        setAssessments(response.data.assessments);
+        if (!selectedAssessmentId && response.data.assessments.length > 0) {
+          setSelectedAssessmentId(response.data.assessments[0].id);
+        }
       } catch (error) {
         setMessage('Failed to load question');
       }
@@ -35,7 +44,7 @@ const UpdateQuestion: React.FC = () => {
     if (id) {
       fetchQuestion();
     }
-  }, [id]);
+  }, [id, selectedAssessmentId]);
 
   const handleUpdateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +55,7 @@ const UpdateQuestion: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage('Question has been updated');
-      router.push(`/admin/questions/${assessmentId}`);
+      router.push(`/admin/questions/${selectedAssessmentId}`);
     } catch (error) {
       setMessage('Failed to update question');
     }
@@ -130,6 +139,22 @@ const UpdateQuestion: React.FC = () => {
             className="w-full p-2 border border-gray-300 rounded-lg"
           />
         </div>
+        {assessments.length > 1 && (
+          <div className="mb-6">
+            <label className="block text-lg font-semibold mb-2">Select Assessment</label>
+            <select
+              value={selectedAssessmentId || ''}
+              onChange={(e) => setSelectedAssessmentId(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg"
+            >
+              {assessments.map((assessment) => (
+                <option key={assessment.id} value={assessment.id}>
+                  {assessment.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <button
           type="submit"
           className="mt-6 p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"

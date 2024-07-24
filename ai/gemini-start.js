@@ -1,14 +1,14 @@
-
-import fetch from 'node-fetch';
+import 'dotenv/config';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const generateQuestionsWithGemini = async (difficulty, topic, numberOfQuestions) => {
-  const apiKey = 'INPUT-API-KEY';
+  const apiKey = 'AIzaSyA7QYriZPPZMZyzFQbOYxKbfbgcDUJIhfk';
   const genAI = new GoogleGenerativeAI(apiKey);
 
   const systemInstruction = `
-  You are an intelligent assistant specializing in adaptive assessments and document processing.
-  Please generate the questions in the following JSON format and provide the correct option:
+  You are an intelligent assistant specializing in creating adaptive assessment questions.
+  Please generate the questions in the following JSON format. The correct option should be the index
+  of the right answer in the options array.:
   [
     {
       "text": "<question_text>",

@@ -1,11 +1,10 @@
-import Admin from "@/components/Admin";
+import CreateAssessment from "@/components/CreateAssessment";
 import Layout from "@/components/Layout";
-import Sidebar from "@/components/SideBar";
 
 const AdminPage: React.FC = () => {
     return (
         <Layout>
-            <Admin />
+            <CreateAssessment />
         </Layout>
     );
 };

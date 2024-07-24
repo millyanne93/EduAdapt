@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const TestResult = require('../models/testResult');
 
 // Helper function to generate a token
 const generateToken = (user) => {
@@ -96,3 +97,24 @@ exports.loginUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+exports.getUsersResults = async (req, res) => {
+  try {
+    const testResults = await TestResult.find({ userId: req.params.userId }).populate('testId');
+    res.json(testResults);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    await TestResult.deleteMany({ userId: req.params.userId });
+    res.json({ msg: 'User and their test results deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+}

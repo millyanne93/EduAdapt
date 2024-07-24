@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 interface Responses {
   questionId: string;
@@ -24,15 +25,25 @@ interface TestResult {
   completedAt: string;
 }
 
-const Results: React.FC = () => {
+interface ResultsProps {
+  userId?: string;
+}
+
+const Results: React.FC<ResultsProps> = ({ userId }) => {
   const [results, setResults] = useState<TestResult[]>([]);
   const [message, setMessage] = useState('');
+  const router = useRouter();
+  const isAdminView = !!userId;
 
   useEffect(() => {
     const getResults = async () => {
       const token = localStorage.getItem('token');
+      const endpoint = isAdminView
+        ? `http://localhost:5000/api/users/${userId}/results`
+        : 'http://localhost:5000/api/testresults/';
+
       try {
-        const response = await axios.get('http://localhost:5000/api/testresults/', {
+        const response = await axios.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setResults(response.data);
@@ -40,8 +51,9 @@ const Results: React.FC = () => {
         setMessage('Couldn\'t get results');
       }
     };
+
     getResults();
-  }, []);
+  }, [userId, isAdminView]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -52,7 +64,9 @@ const Results: React.FC = () => {
   return (
     <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="max-w-3xl w-full bg-white shadow-lg rounded-lg p-8">
-        <h1 className="text-2xl font-bold text-green-600 mb-6 text-center">Your Results</h1>
+        <h1 className="text-2xl font-bold text-green-600 mb-6 text-center">
+          {isAdminView ? 'User Results' : 'Your Results'}
+        </h1>
         <ul className="space-y-4">
           {results.map(result => (
             <li key={result._id} className="p-4 bg-gray-50 shadow rounded-lg">
@@ -64,7 +78,7 @@ const Results: React.FC = () => {
                 </span>
               </div>
               <p className="text-lg">Total Time Spent: {formatTime(result.totalTimeSpent)}</p>
-              <p className="text-lg mt-4">{result.score >= 80 ? "Great job! Keep up the good work!" : "Don't worry, keep practicing and you'll improve!"}</p>
+              <p className="text-lg mt-4">{result.score >= 5 ? "Great job! Keep up the good work!" : "Don't worry, keep practicing and you'll improve!"}</p>
             </li>
           ))}
         </ul>
