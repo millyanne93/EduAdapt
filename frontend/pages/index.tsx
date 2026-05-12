@@ -3,19 +3,24 @@ import { useSpring, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGraduate, faChartLine, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import Layout from '../components/Layout';
+import Link from 'next/link'; // Import Link from next/link
 
 const Home: React.FC = () => {
   const fade = useSpring({ opacity: 1, from: { opacity: 0 }, delay: 200 });
 
   return (
     <Layout>
-      <div className=' my-6'>
+      <div className='my-6'>
         <section className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-20">
           <div className="container mx-auto text-center">
             <animated.div style={fade}>
               <h1 className="text-5xl font-bold mb-6">Welcome to EduAdapt</h1>
               <p className="text-lg mb-4">Personalized Learning through AI-Powered Question Recommendations</p>
-              <a href="/register" className="bg-white text-green-600 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out hover:bg-gray-200">Get Started</a>
+              <Link href="/register">
+                <a className="bg-white text-green-600 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out hover:bg-gray-200">
+                  Get Started
+                </a>
+              </Link>
             </animated.div>
           </div>
         </section>
@@ -30,7 +35,7 @@ const Home: React.FC = () => {
             <animated.div style={useSpring({ opacity: 1, from: { opacity: 0 }, delay: 400 })} className="bg-white p-6 rounded-lg shadow-md text-center">
               <FontAwesomeIcon icon={faChartLine} className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-4">Adaptive Learning Path</h3>
-              <p className="text-gray-600">Dynamic adjustment of difficulty and type of questions to match student's current level.</p>
+              <p className="text-gray-600">Dynamic adjustment of difficulty and type of questions to match student&apos;s current level.</p>
             </animated.div>
             <animated.div style={useSpring({ opacity: 1, from: { opacity: 0 }, delay: 500 })} className="bg-white p-6 rounded-lg shadow-md text-center">
               <FontAwesomeIcon icon={faCommentDots} className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -43,7 +48,11 @@ const Home: React.FC = () => {
           <div className="container mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Join Thousands of Students</h2>
             <p className="text-lg text-gray-700 mb-6">Experience the future of personalized education with EduAdapt.</p>
-            <a href="/register" className="bg-green-500 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out hover:bg-green-600">Sign Up Now</a>
+            <Link href="/register">
+              <a className="bg-green-500 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out hover:bg-green-600">
+                Sign Up Now
+              </a>
+            </Link>
           </div>
         </section>
       </div>

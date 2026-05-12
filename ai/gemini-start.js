@@ -1,7 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const generateQuestionsWithGemini = async (difficulty, topic, numberOfQuestions) => {
-  const apiKey = 'INPUT-API-KEY';
+  const apiKey = process.env.GEMINI_API_KEY;  // ← Use environment variable
+  
+  // Add validation (optional but recommended)
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set in environment variables');
+  }
   const genAI = new GoogleGenerativeAI(apiKey);
 
   const systemInstruction = `
@@ -20,7 +25,7 @@ const generateQuestionsWithGemini = async (difficulty, topic, numberOfQuestions)
 
   const prompt = `${systemInstruction} Generate ${numberOfQuestions} questions on the topic ${topic} with difficulty level ${difficulty} and provide the correct option`;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   const result = await model.generateContent(prompt);
   const response = await result.response;
   let text = await response.text();

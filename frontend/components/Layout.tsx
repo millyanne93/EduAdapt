@@ -71,7 +71,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <main className="flex-1 container mx-auto">{children}</main>
       </div>
       <footer className="bg-green-700 p-4 text-white text-center">
-        © 2024 EduAdapt. All rights reserved.
+        © 2026 EduAdapt. All rights reserved.
       </footer>
     </div>
   );
